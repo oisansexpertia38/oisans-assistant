@@ -1,0 +1,18 @@
+{
+  "name": "OISANS Assistant IA",
+  "short_name": "OISANS",
+  "description": "Assistant téléphonique intelligent",
+  "start_url": "/oisans-assistant/",
+  "display": "standalone",
+  "background_color": "#003d5c",
+  "theme_color": "#00628e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='20,80 50,20 50,80' fill='%235fc4e7'/%3E%3Cpolygon points='50,20 80,80 50,80' fill='%237ed957'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
