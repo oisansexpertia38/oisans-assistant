@@ -879,4 +879,239 @@
         const modal = document.getElementById('dashboardModal');
         
         modal.addEventListener('touchstart', (e) => {
-            touchStart = e.touches[0].
+            touchStart = e.touches[0].clientY;
+        });
+
+        modal.addEventListener('touchmove', (e) => {
+            const touchCurrent = e.touches[0].clientY;
+            const diff = touchCurrent - touchStart;
+            
+            if (diff > 100 && window.scrollY === 0) {
+                closeDashboard();
+            }
+        });
+
+        // Mettre à jour les notifications
+        setInterval(() => {
+            const badge = document.getElementById('notifBadge');
+            if (Math.random() > 0.85) {
+                const current = parseInt(badge.textContent);
+                badge.textContent = current + 1;
+            }
+        }, 15000);
+
+        // Haptic feedback (vibration)
+        function vibrate() {
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+        }
+
+        document.querySelector('.floating-bubble').addEventListener('click', vibrate);
+        document.querySelector('.close-btn').addEventListener('click', vibrate);
+
+        // Gestion des appels entrants
+        let callTimerInterval;
+        let callStartTime;
+        let callDuration = 0;
+        let activeCallInterval;
+        let activeCallDuration = 0;
+
+        // Fonction pour simuler un appel entrant (compatible avec votre code existant)
+        function simulateIncomingCall(callerNumber = '+33612345678', callerName = null) {
+            const callers = [
+                { name: 'Sophie Martin', number: '+33 6 12 34 56 78', avatar: '👩' },
+                { name: 'Jean Dupont', number: '+33 6 23 45 67 89', avatar: '👨' },
+                { name: 'Marie Leblanc', number: '+33 6 34 56 78 90', avatar: '👩‍💼' },
+                { name: 'Client Anonyme', number: callerNumber, avatar: '📞' }
+            ];
+
+            let caller = callers.find(c => c.number === callerNumber);
+            if (!caller) {
+                caller = callerName ? 
+                    { name: callerName, number: callerNumber, avatar: '📞' } :
+                    callers[Math.floor(Math.random() * callers.length)];
+            }
+            
+            document.getElementById('callerName').textContent = caller.name;
+            document.getElementById('callerNumber').textContent = caller.number;
+            document.getElementById('callerAvatar').textContent = caller.avatar;
+            
+            // IMPORTANT: Ouvrir le modal d'appel entrant
+            document.getElementById('incomingCallModal').classList.add('active');
+            
+            // Démarrer le timer (compatible avec votre logique)
+            callStartTime = Date.now();
+            callDuration = 0;
+            
+            callTimerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - callStartTime) / 1000);
+                const minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
+                const seconds = String(elapsed % 60).padStart(2, '0');
+                document.getElementById('callTimer').textContent = 
+                    `Sonne depuis ${minutes}:${seconds}`;
+                
+                // Auto-répondeur après 30 secondes (configurable)
+                if (elapsed >= 30) {
+                    console.log('Appel non répondu après 30s, envoi au répondeur automatique.');
+                    sendToVoicemail();
+                }
+            }, 1000);
+
+            // Vibration
+            if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 200, 100, 200]);
+            }
+
+            console.log(`Appel entrant de ${caller.name} (${caller.number})`);
+        }
+
+        function hideIncomingCallNotification() {
+            document.getElementById('incomingCallModal').classList.remove('active');
+            clearInterval(callTimerInterval);
+        }
+
+        // Fonction pour prendre l'appel (intégration avec votre système)
+        function answerCall() {
+            const caller = document.getElementById('callerName').textContent;
+            const callerNumber = document.getElementById('callerNumber').textContent;
+            
+            clearInterval(callTimerInterval);
+            document.getElementById('incomingCallModal').classList.remove('active');
+            
+            // Afficher l'indicateur d'appel actif
+            document.getElementById('activeCallIndicator').classList.add('active');
+            
+            // Démarrer le timer d'appel actif
+            activeCallDuration = 0;
+            activeCallInterval = setInterval(() => {
+                activeCallDuration++;
+                const minutes = Math.floor(activeCallDuration / 60);
+                const seconds = activeCallDuration % 60;
+                document.getElementById('activeCallTimer').textContent = 
+                    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+
+            vibrate();
+            
+            console.log(`Appel pris en charge: ${caller} (${callerNumber})`);
+            showNotification(`📞 Communication avec ${caller}`, 3000);
+        }
+
+        // Fonction pour envoyer l'appel au répondeur IA
+        function sendToVoicemail() {
+            const caller = document.getElementById('callerName').textContent;
+            const callerNumber = document.getElementById('callerNumber').textContent;
+            
+            clearInterval(callTimerInterval);
+            document.getElementById('incomingCallModal').classList.remove('active');
+            
+            // Afficher notification répondeur
+            const voicemailNotif = document.getElementById('voicemailNotification');
+            voicemailNotif.classList.add('active');
+            
+            vibrate();
+            
+            setTimeout(() => {
+                voicemailNotif.classList.remove('active');
+            }, 4000);
+
+            console.log(`Appel envoyé au répondeur IA: ${caller} (${callerNumber})`);
+            
+            // Ajouter à l'historique
+            addCallToHistory('Répondeur IA activé', 'voicemail');
+            
+            // Incrémenter badge
+            const badge = document.getElementById('notifBadge');
+            badge.textContent = parseInt(badge.textContent) + 1;
+        }
+
+        // Fonction pour refuser l'appel
+        function declineCall() {
+            const caller = document.getElementById('callerName').textContent;
+            const callerNumber = document.getElementById('callerNumber').textContent;
+            
+            clearInterval(callTimerInterval);
+            document.getElementById('incomingCallModal').classList.remove('active');
+            vibrate();
+            
+            console.log(`Appel refusé: ${caller} (${callerNumber})`);
+            showNotification('❌ Appel refusé', 2000);
+            addCallToHistory('Appel refusé', 'declined');
+        }
+
+        // Fonction pour terminer l'appel en cours
+        function endCall() {
+            clearInterval(activeCallInterval);
+            document.getElementById('activeCallIndicator').classList.remove('active');
+            vibrate();
+            
+            const duration = `${Math.floor(activeCallDuration / 60)}min${String(activeCallDuration % 60).padStart(2, '0')}s`;
+            console.log(`Appel terminé. Durée: ${duration}`);
+            showNotification('✓ Appel terminé', 2000);
+            addCallToHistory(`Communication - ${duration}`, 'answered');
+        }
+
+        function addCallToHistory(message, type) {
+            const icons = {
+                'voicemail': '🎙️',
+                'declined': '❌',
+                'answered': '✓'
+            };
+            
+            const colors = {
+                'voicemail': '#ff9800',
+                'declined': '#f44336',
+                'answered': '#7ed957'
+            };
+
+            const callHtml = `
+                <div class="call-item" style="border-left-color: ${colors[type]}">
+                    <div class="call-header">
+                        <div class="call-name">${icons[type]} ${document.getElementById('callerName').textContent}</div>
+                        <div class="call-time">À l'instant</div>
+                    </div>
+                    <div class="call-message">${message}</div>
+                    <span class="call-badge" style="background: ${colors[type]}22; color: ${colors[type]}">${type === 'voicemail' ? 'Répondeur' : type === 'answered' ? 'Répondu' : 'Refusé'}</span>
+                </div>
+            `;
+
+            document.getElementById('recentCalls').insertAdjacentHTML('afterbegin', callHtml);
+            document.getElementById('allCalls').insertAdjacentHTML('afterbegin', callHtml);
+        }
+
+        function showNotification(message, duration) {
+            const notif = document.createElement('div');
+            notif.style.cssText = `
+                position: fixed;
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.85);
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                z-index: 20002;
+                font-size: 14px;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            `;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+
+            setTimeout(() => {
+                notif.remove();
+            }, duration);
+        }
+
+        // Simuler un appel entrant après 5 secondes (pour démo)
+        setTimeout(() => simulateIncomingCall('+33612345678', 'Sophie Martin'), 5000);
+
+        // Fonction pour tester l'appel manuellement (à appeler depuis la console)
+        window.testIncomingCall = function(number, name) {
+            simulateIncomingCall(number, name);
+        };
+    </script>
+
+</body>
+</html>
