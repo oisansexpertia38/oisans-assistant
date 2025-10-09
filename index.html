@@ -25,7 +25,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Bulle flottante optimisée mobile */
         .floating-bubble {
             position: fixed;
             bottom: 20px;
@@ -86,7 +85,6 @@
             padding: 0 4px;
         }
 
-        /* Modal Full Screen Mobile */
         .dashboard-modal {
             position: fixed;
             top: 0;
@@ -106,7 +104,6 @@
             transform: translateY(0);
         }
 
-        /* Header mobile avec logo */
         .mobile-header {
             position: sticky;
             top: 0;
@@ -137,6 +134,42 @@
             color: #5fc4e7;
         }
 
+        .mode-badge {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            touch-action: manipulation;
+        }
+
+        .mode-badge.disponible {
+            background: rgba(126, 217, 87, 0.2);
+            color: #7ed957;
+            border: 1px solid #7ed957;
+        }
+
+        .mode-badge.repondeur {
+            background: rgba(244, 67, 54, 0.2);
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+        }
+
+        .mode-badge:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+
+        .mode-icon {
+            font-size: 10px;
+        }
+
         .close-btn {
             width: 36px;
             height: 36px;
@@ -156,7 +189,6 @@
             transform: scale(0.9);
         }
 
-        /* Tab Navigation Mobile */
         .tab-navigation {
             display: flex;
             background: white;
@@ -201,7 +233,6 @@
             margin-bottom: 4px;
         }
 
-        /* Content Mobile */
         .mobile-content {
             padding: 15px;
             overflow-y: auto;
@@ -209,7 +240,6 @@
             height: calc(100dvh - 130px);
         }
 
-        /* Stats Cards Mobile */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -255,7 +285,6 @@
             color: #7ed957;
         }
 
-        /* Content Section */
         .content-section {
             display: none;
         }
@@ -271,7 +300,6 @@
             margin-bottom: 15px;
         }
 
-        /* Call Items Mobile */
         .call-item {
             background: white;
             padding: 15px;
@@ -318,7 +346,6 @@
             color: #00628e;
         }
 
-        /* Plan Badge Mobile */
         .plan-badge-mobile {
             display: inline-block;
             padding: 6px 12px;
@@ -330,7 +357,6 @@
             margin-bottom: 15px;
         }
 
-        /* Action Buttons */
         .action-btn {
             width: 100%;
             padding: 14px;
@@ -349,7 +375,6 @@
             transform: scale(0.98);
         }
 
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 40px 20px;
@@ -366,7 +391,6 @@
             font-size: 14px;
         }
 
-        /* Pull to refresh indicator */
         .pull-indicator {
             text-align: center;
             padding: 10px;
@@ -375,7 +399,6 @@
             display: none;
         }
 
-        /* Upgrade Banner */
         .upgrade-banner {
             background: linear-gradient(135deg, #5fc4e7, #7ed957);
             padding: 15px;
@@ -406,7 +429,6 @@
             font-size: 13px;
         }
 
-        /* Loading Spinner */
         .loading {
             text-align: center;
             padding: 20px;
@@ -428,7 +450,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Modal d'appel entrant */
         .incoming-call-modal {
             position: fixed;
             top: 0;
@@ -557,7 +578,6 @@
             font-weight: 600;
         }
 
-        /* Mode actif d'appel */
         .active-call-indicator {
             position: fixed;
             top: 0;
@@ -611,7 +631,6 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
-        /* Notification de répondeur */
         .voicemail-notification {
             position: fixed;
             top: 20px;
@@ -643,7 +662,6 @@
             }
         }
 
-        /* Safe area for iOS */
         @supports (padding: max(0px)) {
             .mobile-content {
                 padding-bottom: max(15px, env(safe-area-inset-bottom));
@@ -653,7 +671,6 @@
 </head>
 <body>
 
-    <!-- Bulle flottante -->
     <div class="floating-bubble" id="floatingBubble" onclick="openDashboard()">
         <svg class="bubble-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <circle cx="50" cy="50" r="45" fill="#00628e"/>
@@ -664,9 +681,7 @@
         <div class="notification-badge" id="notifBadge">3</div>
     </div>
 
-    <!-- Dashboard Modal Mobile -->
     <div class="dashboard-modal" id="dashboardModal">
-        <!-- Header -->
         <div class="mobile-header">
             <div class="header-logo">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -677,10 +692,13 @@
                 </svg>
                 <div class="header-title">OISANS EXPERT IA</div>
             </div>
+            <div class="mode-badge disponible" id="modeBadge" onclick="toggleMode()">
+                <span class="mode-icon">🟢</span>
+                <span id="modeText">Disponible</span>
+            </div>
             <div class="close-btn" onclick="closeDashboard()">✕</div>
         </div>
 
-        <!-- Tab Navigation -->
         <div class="tab-navigation">
             <div class="tab-item active" onclick="showTab('dashboard')">
                 <span class="tab-icon">📊</span>
@@ -700,11 +718,9 @@
             </div>
         </div>
 
-        <!-- Content -->
         <div class="mobile-content">
             <div class="pull-indicator" id="pullIndicator">↓ Tirer pour actualiser</div>
 
-            <!-- Dashboard Tab -->
             <div class="content-section active" id="tab-dashboard">
                 <div class="plan-badge-mobile">Forfait Entreprise</div>
 
@@ -745,13 +761,11 @@
                 <div id="recentCalls"></div>
             </div>
 
-            <!-- Calls Tab -->
             <div class="content-section" id="tab-calls">
                 <h3 class="section-title">Historique complet</h3>
                 <div id="allCalls"></div>
             </div>
 
-            <!-- Calendar Tab -->
             <div class="content-section" id="tab-calendar">
                 <h3 class="section-title">Mes rendez-vous</h3>
                 <div class="empty-state">
@@ -761,7 +775,6 @@
                 </div>
             </div>
 
-            <!-- Stats Tab -->
             <div class="content-section" id="tab-stats">
                 <h3 class="section-title">Statistiques</h3>
                 <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; text-align: center;">
@@ -778,7 +791,6 @@
         </div>
     </div>
 
-    <!-- Modal d'appel entrant -->
     <div class="incoming-call-modal" id="incomingCallModal">
         <div class="call-content">
             <div class="caller-avatar" id="callerAvatar">📞</div>
@@ -812,7 +824,6 @@
         </div>
     </div>
 
-    <!-- Indicateur d'appel actif -->
     <div class="active-call-indicator" id="activeCallIndicator">
         <div class="active-call-info">
             <div class="call-pulse"></div>
@@ -824,7 +835,6 @@
         <button class="end-call-btn" onclick="endCall()">Raccrocher</button>
     </div>
 
-    <!-- Notification répondeur -->
     <div class="voicemail-notification" id="voicemailNotification">
         🎙️ Appel transféré au répondeur IA
     </div>
@@ -874,7 +884,6 @@
             document.getElementById('allCalls').innerHTML = html;
         }
 
-        // Swipe down pour fermer
         let touchStart = 0;
         const modal = document.getElementById('dashboardModal');
         
@@ -891,7 +900,6 @@
             }
         });
 
-        // Mettre à jour les notifications
         setInterval(() => {
             const badge = document.getElementById('notifBadge');
             if (Math.random() > 0.85) {
@@ -900,7 +908,6 @@
             }
         }, 15000);
 
-        // Haptic feedback (vibration)
         function vibrate() {
             if (navigator.vibrate) {
                 navigator.vibrate(10);
@@ -910,15 +917,50 @@
         document.querySelector('.floating-bubble').addEventListener('click', vibrate);
         document.querySelector('.close-btn').addEventListener('click', vibrate);
 
-        // Gestion des appels entrants
+        let modeRepondeur = false;
+
+        function toggleMode() {
+            modeRepondeur = !modeRepondeur;
+            const badge = document.getElementById('modeBadge');
+            const text = document.getElementById('modeText');
+            const icon = badge.querySelector('.mode-icon');
+            
+            if (modeRepondeur) {
+                badge.classList.remove('disponible');
+                badge.classList.add('repondeur');
+                icon.textContent = '🔴';
+                text.textContent = 'Répondeur';
+                showNotification('🔴 Mode répondeur activé - Les appels vont directement à l\'IA', 3000);
+            } else {
+                badge.classList.remove('repondeur');
+                badge.classList.add('disponible');
+                icon.textContent = '🟢';
+                text.textContent = 'Disponible';
+                showNotification('🟢 Mode disponible - Vous recevrez les notifications d\'appels', 3000);
+            }
+            
+            vibrate();
+        }
+
         let callTimerInterval;
         let callStartTime;
         let callDuration = 0;
         let activeCallInterval;
         let activeCallDuration = 0;
 
-        // Fonction pour simuler un appel entrant (compatible avec votre code existant)
         function simulateIncomingCall(callerNumber = '+33612345678', callerName = null) {
+            if (modeRepondeur) {
+                console.log('Mode répondeur actif - Appel traité automatiquement par l\'IA');
+                const caller = callerName || 'Client';
+                showNotification(`📞 Appel de ${caller} traité par le répondeur IA`, 4000);
+                
+                const badge = document.getElementById('notifBadge');
+                badge.textContent = parseInt(badge.textContent) + 1;
+                
+                addCallToHistory('Traité par répondeur IA', 'voicemail');
+                return;
+            }
+
             const callers = [
                 { name: 'Sophie Martin', number: '+33 6 12 34 56 78', avatar: '👩' },
                 { name: 'Jean Dupont', number: '+33 6 23 45 67 89', avatar: '👨' },
@@ -937,10 +979,8 @@
             document.getElementById('callerNumber').textContent = caller.number;
             document.getElementById('callerAvatar').textContent = caller.avatar;
             
-            // IMPORTANT: Ouvrir le modal d'appel entrant
             document.getElementById('incomingCallModal').classList.add('active');
             
-            // Démarrer le timer (compatible avec votre logique)
             callStartTime = Date.now();
             callDuration = 0;
             
@@ -951,14 +991,12 @@
                 document.getElementById('callTimer').textContent = 
                     `Sonne depuis ${minutes}:${seconds}`;
                 
-                // Auto-répondeur après 30 secondes (configurable)
                 if (elapsed >= 30) {
                     console.log('Appel non répondu après 30s, envoi au répondeur automatique.');
                     sendToVoicemail();
                 }
             }, 1000);
 
-            // Vibration
             if (navigator.vibrate) {
                 navigator.vibrate([200, 100, 200, 100, 200]);
             }
@@ -971,7 +1009,6 @@
             clearInterval(callTimerInterval);
         }
 
-        // Fonction pour prendre l'appel (intégration avec votre système)
         function answerCall() {
             const caller = document.getElementById('callerName').textContent;
             const callerNumber = document.getElementById('callerNumber').textContent;
@@ -979,10 +1016,8 @@
             clearInterval(callTimerInterval);
             document.getElementById('incomingCallModal').classList.remove('active');
             
-            // Afficher l'indicateur d'appel actif
             document.getElementById('activeCallIndicator').classList.add('active');
             
-            // Démarrer le timer d'appel actif
             activeCallDuration = 0;
             activeCallInterval = setInterval(() => {
                 activeCallDuration++;
@@ -998,7 +1033,6 @@
             showNotification(`📞 Communication avec ${caller}`, 3000);
         }
 
-        // Fonction pour envoyer l'appel au répondeur IA
         function sendToVoicemail() {
             const caller = document.getElementById('callerName').textContent;
             const callerNumber = document.getElementById('callerNumber').textContent;
@@ -1006,7 +1040,6 @@
             clearInterval(callTimerInterval);
             document.getElementById('incomingCallModal').classList.remove('active');
             
-            // Afficher notification répondeur
             const voicemailNotif = document.getElementById('voicemailNotification');
             voicemailNotif.classList.add('active');
             
@@ -1018,15 +1051,12 @@
 
             console.log(`Appel envoyé au répondeur IA: ${caller} (${callerNumber})`);
             
-            // Ajouter à l'historique
             addCallToHistory('Répondeur IA activé', 'voicemail');
             
-            // Incrémenter badge
             const badge = document.getElementById('notifBadge');
             badge.textContent = parseInt(badge.textContent) + 1;
         }
 
-        // Fonction pour refuser l'appel
         function declineCall() {
             const caller = document.getElementById('callerName').textContent;
             const callerNumber = document.getElementById('callerNumber').textContent;
@@ -1040,7 +1070,6 @@
             addCallToHistory('Appel refusé', 'declined');
         }
 
-        // Fonction pour terminer l'appel en cours
         function endCall() {
             clearInterval(activeCallInterval);
             document.getElementById('activeCallIndicator').classList.remove('active');
@@ -1104,10 +1133,8 @@
             }, duration);
         }
 
-        // Simuler un appel entrant après 5 secondes (pour démo)
         setTimeout(() => simulateIncomingCall('+33612345678', 'Sophie Martin'), 5000);
 
-        // Fonction pour tester l'appel manuellement (à appeler depuis la console)
         window.testIncomingCall = function(number, name) {
             simulateIncomingCall(number, name);
         };
