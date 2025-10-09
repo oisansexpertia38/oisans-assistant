@@ -111,7 +111,7 @@
             padding: 15px 20px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 12px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             z-index: 100;
         }
@@ -121,6 +121,7 @@
             align-items: center;
             gap: 10px;
             color: white;
+            flex-shrink: 0;
         }
 
         .header-logo svg {
@@ -135,9 +136,6 @@
         }
 
         .mode-badge {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 11px;
@@ -148,6 +146,8 @@
             align-items: center;
             gap: 6px;
             touch-action: manipulation;
+            flex-shrink: 0;
+            margin-left: auto;
         }
 
         .mode-badge.disponible {
@@ -163,7 +163,7 @@
         }
 
         .mode-badge:active {
-            transform: translateX(-50%) scale(0.95);
+            transform: scale(0.95);
         }
 
         .mode-icon {
