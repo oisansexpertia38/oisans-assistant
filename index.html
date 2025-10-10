@@ -885,17 +885,24 @@
         }
 
         let touchStart = 0;
+        let touchStartElement = null;
         const modal = document.getElementById('dashboardModal');
+        const mobileContent = document.querySelector('.mobile-content');
         
         modal.addEventListener('touchstart', (e) => {
             touchStart = e.touches[0].clientY;
+            touchStartElement = e.target;
         });
 
         modal.addEventListener('touchmove', (e) => {
             const touchCurrent = e.touches[0].clientY;
             const diff = touchCurrent - touchStart;
             
-            if (diff > 100 && window.scrollY === 0) {
+            // Ne ferme que si le swipe commence depuis le header et que le contenu n'est pas scrollé
+            const isFromHeader = !mobileContent.contains(touchStartElement);
+            const isContentAtTop = mobileContent.scrollTop === 0;
+            
+            if (diff > 100 && isFromHeader && isContentAtTop) {
                 closeDashboard();
             }
         });
